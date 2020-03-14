@@ -74,11 +74,11 @@ void printch(char str)
 
     switch(str)
     {
-        case (0x08):
+        case ('\b'):
             if(cursorX > 0) 
             {
 	             cursorX--;									
-                VideoMemory[(cursorY * sw + cursorX)*sd]=0x00;	                              
+                // VideoMemory[(cursorY * sw + cursorX)*sd]=0x00 & 0xFF00;	                              
 	        }
 	        break;
      
@@ -143,6 +143,15 @@ uint8_t strEql(char * ch1,char * ch2)
 void shutdown()
 {                                                     //temp shutdown code
     outportw(0x4004, 0x3400);
+}
+
+void reboot()
+{                                                      //temp restart code
+    uint8_t good = 0x02;
+    while (good & 0x02)
+        good = inportb(0x64);
+    outportb(0x64, 0xFE);
+    asm volatile ("hlt");
 }
 
 #endif

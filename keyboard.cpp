@@ -1,27 +1,11 @@
-#ifndef __KEYBOARD_H
-#define __KEYBOARD_H
-
-    #include "types.h"
-    #include "interrupts.h"
-//     #include "port.h"
-     #include "std.h"
-
-    class KeyboardDriver : public InterruptHandler
-    {
-        Port8Bit dataport;
-        Port8Bit commandport;
-    public:
-        KeyboardDriver(InterruptManager* manager);
-        ~KeyboardDriver();
-        virtual uint32_t HandleInterrupt(uint32_t esp);
-    };
+#include "header/keyboard.h"
 
 KeyboardDriver::KeyboardDriver(InterruptManager* manager)
 : InterruptHandler(manager, 0x21),
 dataport(0x60),
 commandport(0x64)
 {
-//     while(commandport.Read() & 0x1)
+    while(commandport.Read() & 0x1)
         dataport.Read();
     commandport.Write(0xae); // activate interrupts
     commandport.Write(0x20); // command 0x20 = read controller command byte
@@ -39,13 +23,13 @@ void printf(char*);
 
 uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
 {
-//     int mode;
-//     mode = 1; //default is terminal mode 0 and the next is text mode
-     uint32_t * buffstr;
-     uint8_t i = 0;
-//     uint8_t reading = 1;
-//     while(reading)
-//     {
+    int mode;
+    mode = 1; //default is terminal mode 0 and the next is text mode
+    uint32_t * buffstr;
+    uint8_t i = 0;
+    uint8_t reading = 1;
+    while(reading)
+    {
         uint8_t key = dataport.Read();
         if(key < 0x80)
         {
@@ -118,8 +102,6 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
                     break;
             case 14:
                     printch('\b');
-                    printch(0x00);
-                    printch('\b');
                     i--;
                     buffstr[i] = 0;
                     break;
@@ -189,17 +171,17 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
                     i++;
                     break;
             case 28:
-                //     i++;
-                //     if (mode = 0) //if terminal mode
-                //     {
-                //     reading = 0;
-                //     }
-                //     else
-                //     {
+                    i++;
+                    if (mode = 0) //if terminal mode
+                    {
+                    reading = 0;
+                    }
+                    else
+                    {
                     printch('\n');
                     buffstr[i] = '\n';
                     i++;
-                //     }
+                    }
                     
 
                     break;
@@ -360,10 +342,8 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
                     }
                 }
         }
-//     }
-//     buffstr[i] = 0;                   
-//     //return buffstr;
-    return esp;
+    }
+    buffstr[i] = 0;                   
+    //return buffstr;
+    //return esp;
 }
-
-#endif 

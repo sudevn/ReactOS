@@ -62,7 +62,7 @@ HandleInterruptRequest 0x31
 
 int_bottom:
 
-    # register sichern
+    # Save old registers
     pusha
     pushl %ds
     pushl %es
@@ -75,14 +75,14 @@ int_bottom:
     #mov %eax, %eds
     #mov %eax, %ees
 
-    # C++ Handler aufrufen
+    # C++ Handler function
     pushl %esp
     push (interruptnumber)
     call _ZN16InterruptManager15HandleInterruptEhj
     add %esp, 6
     mov %eax, %esp # den stack wechseln
 
-    # register laden
+    # bring back old registers
     pop %gs
     pop %fs
     pop %es
@@ -90,6 +90,7 @@ int_bottom:
     popa
 
 .global _ZN16InterruptManager15InterruptIgnoreEv
+# return to previous funtion
 _ZN16InterruptManager15InterruptIgnoreEv:
 
     iret
@@ -97,4 +98,3 @@ _ZN16InterruptManager15InterruptIgnoreEv:
 
 .data
     interruptnumber: .byte 0
-    
