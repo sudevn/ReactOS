@@ -140,5 +140,10 @@ uint8_t strEql(char * ch1,char * ch2)
         return result;
 }
 
+void shutdown()
+{                                                     //temp shutdown code
+    outportw(0x4004, 0x3400);
+}
+
 #endif
 

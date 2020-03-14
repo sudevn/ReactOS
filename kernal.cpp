@@ -29,13 +29,32 @@ extern "C" void kernelMain(const void* multiboot_structure, unsigned int /*multi
     printf(     " \\___ \\|  __  | / /\\ \\| |    |  <       \n");  
     printf(     "___) | |  | |/ ____ \\ |____| . \\        \n");
     printf(     "_____/|_|  |_/_/    \\_\\_____|_|\\_\\      \n");
-       printf("Welcome to NIDOS operating system\nPlease enter a command\n");
+       printf("Welcome to Sudev operating system\nPlease enter a command\n");
        while (1)
        {
-                printf("\nNIDOS> ");
+                printf("\nSUDEV> ");
                 
                 char * ch = readStr();
-                printf(ch);
+                if (strEql(ch , "sudev") == 1)
+                {
+                    printf("\nyou are in god mode");
+                }
+                if (strEql(ch , "shutdown") == 1)
+                {
+                    printf("\nGoodbye");
+                    shutdown();
+                }
+                if (strEql(ch , "help") == 1)
+                {
+                    printf("\nFollowing Commands are available");
+                    printf("\nsudev - special");
+                    printf("\nshutdown - what does it sound like");
+                }
+                else 
+                {
+                printf("\nType help");
+                }
+                
        }
      
         GlobalDescriptorTable gdt;
