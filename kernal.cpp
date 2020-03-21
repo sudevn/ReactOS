@@ -2,6 +2,7 @@
 #include "header/std.h"
 #include "header/gdt.h"
 #include "header/keyboard.h"
+#include "header/mouse.h"
 #include "header/interrupts.h"
 
 
@@ -73,6 +74,7 @@ extern "C" void kernelMain(const void* multiboot_structure, unsigned int /*multi
     GlobalDescriptorTable gdt;
     InterruptManager interrupts(0x20, &gdt);
     KeyboardDriver keyboard(&interrupts);
+    MouseDriver mouse(&interrupts);
     interrupts.Activate();
 
     while(1);

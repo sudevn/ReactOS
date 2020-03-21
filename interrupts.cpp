@@ -47,16 +47,16 @@ void InterruptManager::SetInterruptDescriptorTableEntry(uint8_t interrupt,
     // and address of the handler (relative to segment)
     interruptDescriptorTable[interrupt].handlerAddressLowBits = ((uint32_t) handler) & 0xFFFF;
     interruptDescriptorTable[interrupt].handlerAddressHighBits = (((uint32_t) handler) >> 16) & 0xFFFF;
-    interruptDescriptorTable[interrupt].gdt_codeSegmentSelector = CodeSegment;
+    interruptDescriptorTable[interrupt].gdt_codeSegmentSelector = CodeSegment;                          //0x08 for kernal code segment
 
     const uint8_t IDT_DESC_PRESENT = 0x80;
-    interruptDescriptorTable[interrupt].access = IDT_DESC_PRESENT | ((DescriptorPrivilegeLevel & 3) << 5) | DescriptorType;
+    interruptDescriptorTable[interrupt].access = IDT_DESC_PRESENT | ((DescriptorPrivilegeLevel & 3) << 5) | DescriptorType; //0x80 | (0 & 3) <<5 | 0XE = 0x8e which is the inturrupt gate
     interruptDescriptorTable[interrupt].reserved = 0;
 }
 
 
 InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable)
-    : programmableInterruptControllerMasterCommandPort(0x20),
+    : programmableInterruptControllerMasterCommandPort(0x20),       //setting ports for idt
       programmableInterruptControllerMasterDataPort(0x21),
       programmableInterruptControllerSlaveCommandPort(0xA0),
       programmableInterruptControllerSlaveDataPort(0xA1)
@@ -115,8 +115,8 @@ InterruptManager::InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescr
     programmableInterruptControllerSlaveCommandPort.Write(0x11);
 
     // remap
-    programmableInterruptControllerMasterDataPort.Write(hardwareInterruptOffset);
-    programmableInterruptControllerSlaveDataPort.Write(hardwareInterruptOffset+8);
+    programmableInterruptControllerMasterDataPort.Write(hardwareInterruptOffset);       //if it is 0x20 that is 32 in decimals 
+    programmableInterruptControllerSlaveDataPort.Write(hardwareInterruptOffset+8);      //it would be 40 as per osdev website
 
     programmableInterruptControllerMasterDataPort.Write(0x04);
     programmableInterruptControllerSlaveDataPort.Write(0x02);

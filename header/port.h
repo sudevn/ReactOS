@@ -49,7 +49,7 @@
         protected:
             static inline void Write8Slow(uint16_t _port, uint8_t _data)
             {
-                __asm__ volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (_data), "Nd" (_port));
+                __asm__ volatile("outb %0, %1\njmp 1f\n1: jmp 1f\n1:" : : "a" (_data), "Nd" (_port));       //force cpu to wait for io operation to finish so jump to 1: so it jumps 2 times (should change later after implementing status)
             }
 
     };

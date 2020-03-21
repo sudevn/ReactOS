@@ -3,7 +3,7 @@
 
     #include "types.h"
     #include "interrupts.h"
-//     #include "port.h"
+    #include "port.h"
      #include "std.h"
 
     class KeyboardDriver : public InterruptHandler
@@ -17,33 +17,32 @@
     };
 
 KeyboardDriver::KeyboardDriver(InterruptManager* manager)
-: InterruptHandler(manager, 0x21),
+: InterruptHandler(manager, 0x21),      //1 is the isa irq for mouse see https://wiki.osdev.org/Interrupts , so 32+1=33
 dataport(0x60),
 commandport(0x64)
 {
-//     while(commandport.Read() & 0x1)
+    while(commandport.Read() & 0x1)
         dataport.Read();
-    commandport.Write(0xae); // activate interrupts
+    commandport.Write(0xae); // activate interrupts see https://wiki.osdev.org/%228042%22_PS/2_Controller
     commandport.Write(0x20); // command 0x20 = read controller command byte
-    uint8_t status = (dataport.Read() | 1) & ~0x10;
-    commandport.Write(0x60); // command 0x60 = set controller command byte
+    uint8_t status = (dataport.Read() | 1) & ~0x10;     //if success 1 so 1 & 11101111 = 1 if not success (0 | 1)&11101111=1 so whats the point
+    commandport.Write(0x60); // command 0x60 = set controller command byte see above link
     dataport.Write(status);
-    dataport.Write(0xf4);
+    dataport.Write(0xf4);       //see https://wiki.osdev.org/PS2_Keyboard#Commands
 }
 
 KeyboardDriver::~KeyboardDriver()
 {
 }
 
-void printf(char*);
 
 uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
 {
-//     int mode;
-//     mode = 1; //default is terminal mode 0 and the next is text mode
-     uint32_t * buffstr;
+    int mode;
+    mode = 1; //default is terminal mode 0 and the next is text mode
+     char * buffstr;
      uint8_t i = 0;
-//     uint8_t reading = 1;
+    uint8_t reading = 1;
 //     while(reading)
 //     {
         uint8_t key = dataport.Read();
@@ -58,6 +57,7 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
                     break;*/
             case 2:
                     printch('1');
+                    printch(i);
                     buffstr[i] = '1';
                     i++;
                     break;
@@ -189,17 +189,17 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
                     i++;
                     break;
             case 28:
-                //     i++;
-                //     if (mode = 0) //if terminal mode
-                //     {
-                //     reading = 0;
-                //     }
-                //     else
-                //     {
+                    if (mode == 0) //if terminal mode
+                    {
+                    i++;
+                    reading = 0;
+                    }
+                    else
+                    {
                     printch('\n');
                     buffstr[i] = '\n';
                     i++;
-                //     }
+                    }
                     
 
                     break;
@@ -360,10 +360,14 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
                     }
                 }
         }
+            return esp;
 //     }
-//     buffstr[i] = 0;                   
-//     //return buffstr;
-    return esp;
+//     buffstr[i] = 0;
+//     printf("\nyou typed '") ;           
+//     printf(buffstr);
+//     printf("'") ;
+
 }
+
 
 #endif 
