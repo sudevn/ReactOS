@@ -73,8 +73,11 @@ extern "C" void kernelMain(const void* multiboot_structure, unsigned int /*multi
 
     GlobalDescriptorTable gdt;
     InterruptManager interrupts(0x20, &gdt);
+    printf("\n Started GDT ...");
     KeyboardDriver keyboard(&interrupts);
+    printf("\n Started keyboard ...");
     MouseDriver mouse(&interrupts);
+    printf("\n Started mouse ...");
     interrupts.Activate();
 
     while(1);
