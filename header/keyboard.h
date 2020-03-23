@@ -1,10 +1,10 @@
 #ifndef __KEYBOARD_H
 #define __KEYBOARD_H
 
-    #include "types.h"
-    #include "interrupts.h"
-    #include "port.h"
-     #include "std.h"
+        #include "types.h"
+        #include "interrupts.h"
+        #include "port.h"
+        #include "std.h"
 
     class KeyboardDriver : public InterruptHandler
     {
@@ -38,11 +38,11 @@ KeyboardDriver::~KeyboardDriver()
 
 uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
 {
-    int mode;
-    mode = 1; //default is terminal mode 0 and the next is text mode
-     char * buffstr;
-     uint8_t i = 0;
-    uint8_t reading = 1;
+        int mode;
+        mode = 1; //default is terminal mode 0 and the next is text mode
+        char * buffstr;
+        uint8_t i = 0;
+        uint8_t reading = 1;
 //     while(reading)
 //     {
         uint8_t key = dataport.Read();

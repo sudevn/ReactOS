@@ -53,7 +53,6 @@ extern "C" void kernelMain(const void* multiboot_structure, unsigned int /*multi
     //             else if (strEql(ch , "help") == 1)
     //             {
     //                 printf("\nFollowing Commands are available");
-    //                 printf("\nsudev     - special");
     //                 printf("\nshutdown  - what does it sound like");
     //                 printf("\nrestart   - give me an another chance to grow up once again");
     //                 printf("\ncls     - clean slate");
@@ -79,7 +78,6 @@ extern "C" void kernelMain(const void* multiboot_structure, unsigned int /*multi
     MouseDriver mouse(&interrupts);
     printf("\n Started mouse ...");
     interrupts.Activate();
-
     while(1);
     
 
