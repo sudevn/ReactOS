@@ -102,7 +102,7 @@
             Port8BitSlow programmableInterruptControllerSlaveDataPort;
 
         public:
-            InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable);
+            InterruptManager(uint16_t hardwareInterruptOffset, GlobalDescriptorTable* globalDescriptorTable);   //this being called in interrupt.cppp
             ~InterruptManager();
             uint16_t HardwareInterruptOffset();
             void Activate();

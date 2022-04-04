@@ -17,7 +17,7 @@
     };
 
 KeyboardDriver::KeyboardDriver(InterruptManager* manager)
-: InterruptHandler(manager, 0x21),      //1 is the isa irq for mouse see https://wiki.osdev.org/Interrupts , so 32+1=33
+: InterruptHandler(manager, 0x21),      //1 is the isa irq for keyboard see https://wiki.osdev.org/Interrupts , so 32+1=33
 dataport(0x60),
 commandport(0x64)
 {
@@ -368,6 +368,7 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
 //     printf("'") ;
 
 }
+
 
 
 #endif 

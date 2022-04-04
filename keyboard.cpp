@@ -19,7 +19,6 @@ KeyboardDriver::~KeyboardDriver()
 {
 }
 
-void printf(char*);
 
 uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
 {
@@ -28,8 +27,8 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
     uint32_t * buffstr;
     uint8_t i = 0;
     uint8_t reading = 1;
-    while(reading)
-    {
+//     while(reading)
+//     {
         uint8_t key = dataport.Read();
         if(key < 0x80)
         {
@@ -342,8 +341,8 @@ uint32_t KeyboardDriver::HandleInterrupt(uint32_t esp)
                     }
                 }
         }
-    }
-    buffstr[i] = 0;                   
-    //return buffstr;
-    //return esp;
+//     }
+//     buffstr[i] = 0;                   
+//     return buffstr;
+    return esp;
 }
